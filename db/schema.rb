@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_10_13_183836) do
 
   # These are extensions that must be enabled in order to support this database
@@ -18,6 +19,20 @@ ActiveRecord::Schema.define(version: 2020_10_13_183836) do
 =======
 ActiveRecord::Schema.define(version: 2020_10_15_130837) do
 >>>>>>> Added all changes made in the lesson on models, except last practice
+=======
+ActiveRecord::Schema.define(version: 2020_10_15_133818) do
+
+  create_table "networks", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "networks_orders", id: false, force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "network_id", null: false
+  end
+>>>>>>> Added several changes for last practice
 
   create_table "orders", force: :cascade do |t|
     t.string "name"
