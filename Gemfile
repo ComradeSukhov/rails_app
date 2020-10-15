@@ -21,6 +21,14 @@ gem 'httpclient'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+# Гемы поставленные на уроке фронтэнда
+gem 'active_model_serializers'
+gem 'grape'
+gem 'grape-entity'
+gem 'grape-swagger'
+gem 'grape-swagger-entity'
+gem 'grape-swagger-rails'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
