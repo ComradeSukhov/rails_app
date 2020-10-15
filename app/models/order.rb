@@ -11,4 +11,5 @@ class Order < ApplicationRecord
   enum status: %w[unavailable created started failed removed]
 
   belongs_to :user
+  has_and_belongs_to_many :tags
 end

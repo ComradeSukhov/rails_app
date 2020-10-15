@@ -5,4 +5,5 @@ class User < ApplicationRecord
   # scope :users_with_created_orders, -> { select('user') }
 
   has_many :orders
+  has_one :passport_data
 end
