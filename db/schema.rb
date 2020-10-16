@@ -10,29 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_10_13_183836) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-=======
-ActiveRecord::Schema.define(version: 2020_10_15_130837) do
->>>>>>> Added all changes made in the lesson on models, except last practice
-=======
-ActiveRecord::Schema.define(version: 2020_10_15_133818) do
-
-  create_table "networks", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "networks_orders", id: false, force: :cascade do |t|
-    t.integer "order_id", null: false
-    t.integer "network_id", null: false
-  end
->>>>>>> Added several changes for last practice
 
   create_table "orders", force: :cascade do |t|
     t.string "name"
@@ -46,23 +27,6 @@ ActiveRecord::Schema.define(version: 2020_10_15_133818) do
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
-<<<<<<< HEAD
-=======
-  create_table "orders_tags", id: false, force: :cascade do |t|
-    t.integer "order_id", null: false
-    t.integer "tag_id", null: false
-  end
-
-  create_table "passport_data", force: :cascade do |t|
-    t.integer "series"
-    t.integer "number"
-    t.integer "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_passport_data_on_user_id"
-  end
-
->>>>>>> Added all changes made in the lesson on models, except last practice
   create_table "tags", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
