@@ -20,13 +20,13 @@
   users = User.all
   tags = Tag.all
   
-  100_000.times do |time|
+  100.times do |time|
     Order.create(
       name: "vm-#{time}",
       cost: rand(10000),
       status: rand(5),
       user: users.shuffle.first,
-    #   tags: tags.shuffle.take(rand(5))
+      tags: tags.shuffle.take(rand(5))
     )
   end
   

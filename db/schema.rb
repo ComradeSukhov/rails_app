@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_13_183836) do
+ActiveRecord::Schema.define(version: 2020_10_15_133818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "networks", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "networks_orders", id: false, force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "network_id", null: false
+  end
 
   create_table "orders", force: :cascade do |t|
     t.string "name"
@@ -25,6 +36,20 @@ ActiveRecord::Schema.define(version: 2020_10_13_183836) do
     t.integer "user_id", null: false
     t.index ["cost"], name: "index_orders_on_cost"
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "orders_tags", id: false, force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "tag_id", null: false
+  end
+
+  create_table "passport_data", force: :cascade do |t|
+    t.integer "series"
+    t.integer "number"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_passport_data_on_user_id"
   end
 
   create_table "tags", force: :cascade do |t|
