@@ -8,7 +8,13 @@
 %w[fastest slowest db app ballancer rabbitmq sidekiq cache_db].each do |tag_name|
     Tag.create(name: tag_name)
   end
-  
+
+  10.times do |time|
+    Network.create(
+      name: "NetW_№_#{time}"
+    )
+  end
+
   10.times do |time|
     User.create(
       name: "First_#{time}",
@@ -17,16 +23,18 @@
     )
   end
   
-  users = User.all
-  tags = Tag.all
+  users    = User.all
+  tags     = Tag.all
+  networks = Network.all
   
-  100.times do |time|
+  50.times do |time|
     Order.create(
       name: "vm-#{time}",
       cost: rand(10000),
       status: rand(5),
       user: users.shuffle.first,
-      tags: tags.shuffle.take(rand(5))
+      tags: tags.shuffle.take(rand(5)),
+      networks: networks.shuffle.take(rand(5))
     )
   end
   
