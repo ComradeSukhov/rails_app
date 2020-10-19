@@ -1,9 +1,11 @@
 class OrderSerializer < ActiveModel::Serializer
-    # attributes :id, :full_name
-  
-    # def full_name
-    #   "#{object.last_name} #{object.first_name}"
-    # end
+  attributes :name, :created_at, :networks_count, :tags
 
+  def networks_count
+    "#{object.networks.size}"
+  end
+
+  def tags
+    object.tags.select(:id,:name)
+  end
 end
-  
