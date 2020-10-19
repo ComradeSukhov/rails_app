@@ -7,7 +7,35 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    render json: Order.first(3), each_serializer: OrderSerializer
+    @orders = Order.all
+    orders = []
+    
+    @orders.left_joins(:networks).preload(:networks, :tags).each do |order|
+      
+      # Creating a hash tag
+      if order.tags.size.positive?
+        tags = []
+        order.tags.each do |tag|
+          tags << {id: tag.id, name: tag.name} 
+        end
+      else
+        tags = []
+      end
+
+      # Creating a hash order
+      the_order = {"name" => "#{order.name}",
+                   "created_at" => "#{order.created_at}",
+                   "networks_count" => "#{order.networks.size}",
+                   "tags" => tags
+                  }
+                  
+      orders << the_order
+    end
+
+    render json: {orders: orders}
+
+    # With help Serializer
+    # render json: Order.first(3), each_serializer: OrderSerializer
   end
 
   # GET /orders/1
