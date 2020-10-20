@@ -1,15 +1,33 @@
 class User < ApplicationRecord
   # validates :name, length: { minimum: 3 }
   # validates :name, format: { with: /[A-Z].*/,
-  #                              message: "Первая буква должна быть заглавной" }
-  # scope :users_with_created_orders, -> { select('user') }
+  #                            message: "Первая буква должна быть заглавной" }
 
-  def self.created_orders_low_to_hi
-    User.select(:name, 'SUM(cost) AS orders_sum')
-        .joins(:orders)
-        .group('users.name')
-        .where("status = '1'")
-        .order('orders_sum ASC')
+  scope :users_with_orders, -> (by_order = 'ASC') {  select(:id,
+                                                            :name,
+                                                            'SUM(cost) AS orders_sum')
+                                                     .joins(:orders)
+                                                     .group(:id, 'users.name')
+                                                     .where("status = '1'")
+                                                     .order("orders_sum #{by_order}")
+                                                     .preload('orders')
+                                                  }
+
+  def self.show_users_with_orders(by_order = 'ASC')
+    users_with_orders(by_order).each do |user|
+
+      puts "Имя пользователя: #{user.name}"
+      puts "Сумма заказов #{user.orders_sum}"
+      
+      user.orders.each do |order|
+        next unless order.status == 'created'
+        puts "\n"
+        puts "Имя заказа: #{order.name}"
+        puts "Статус заказа: #{order.status}"
+        puts "Стоимость заказа: #{order.cost}"
+      end
+      puts '--------'
+    end
   end
 
   has_many :orders
