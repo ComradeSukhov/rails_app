@@ -1,6 +1,6 @@
 class Order < ApplicationRecord
-
-  # validates :name, length: { maximum: 10 }
+  
+  validates :name, length: { maximum: 10 }
 
   before_create :set_cost
 
