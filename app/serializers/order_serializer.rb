@@ -6,6 +6,11 @@ class OrderSerializer < ActiveModel::Serializer
   end
 
   def tags
-    object.tags.select(:id,:name)
+    tags = []
+
+    object.tags.each do |tag|
+      tags << { id: tag.id, name: tag.name }
+    end
+    tags
   end
 end
