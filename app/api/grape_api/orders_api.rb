@@ -2,35 +2,82 @@ class GrapeApi
   class OrdersApi < Grape::API # rubocop:disable Metrics/ClassLength
     format :json
 
+    desc "Create a new order"
+
     namespace :orders do      
       # POST /api/orders
       params do
-        optional :name, type: String
-        optional :surname, type: String
-        optional :balans, type: Integer
+        requires :name, type: String
+        requires :status, type: Integer
+        requires :user_id, type: Integer
       end
 
       post do
-        # POST /api/users
-          Order.create!({
-            name:params[:name],
-            status:params[:status],
-            cost:params[:cost],
-            user_id:params[:user_id]
-          })
+        Order.create!({
+          name: params[:name],
+          status: params[:status],
+          user_id: params[:user_id]
+        })
+      end
+
+    desc "Get an order by ID"
+
+      # GET /api/orders/:id
+      route_param :id, type: Integer do
+          
+        get do
+          order = Order.find(params[:id])
+          error!({ message: 'Заказ не найден' }, 404) unless order
+          present order, with: GrapeApi::Entities::Order
+        end
+      end
+
+    desc "Update order"
+
+      # PUT /api/orders/:id
+      route_param :id, type: Integer do
+        params do
+          optional :name, type: String
+          optional :status, type: String
+          optional :cost, type: Integer
+          optional :user_id, type: Integer
         end
 
-        # read do
+        put do
+          Order.find(params[:id]).update(params)
+        end
+      end
 
-        # end
+    desc "Delete order"
 
-        # update do
+      # DELETE /api/orders/:id
+      route_param :id, type: Integer do
 
-        # end
+        delete do
+          Order.find(params[:id]).destroy!
+        end
+      end
 
-        # delete do
+    desc "Get a list of orders with the option to filter by status"
 
-        # end
+      # get /api/orders
+      params do
+        optional :status, type: String, desc: 'Status list:
+                                               1 - unavailable,
+                                               2 - created,
+                                               3 - started,
+                                               4 - failed,
+                                               5 - removed'
+      end
+
+      get do
+        if params[:status]
+          Order.where(status: params[:status])
+        else
+          Order.all
+        end
+      end
+
     end
   end
 end
