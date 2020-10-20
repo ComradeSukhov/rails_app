@@ -1,9 +1,9 @@
 class User < ApplicationRecord
-  validates :name, :surname, length: { minimum: 3 }
-  validates :name, :surname, format: { with: /\A[А-ЯA-Z].*\z/,
-                             message: "Первая буква должна быть заглавной" }
-  validates :name, :surname, format: { with: /\A[а-яА-Я].*\z/,
-                             message: "Элементы имени должны содержать только русские символы" }
+  # validates :name, :surname, length: { minimum: 3 }
+  # validates :name, :surname, format: { with: /\A[А-ЯA-Z].*\z/,
+  #                            message: "Первая буква должна быть заглавной" }
+  # validates :name, :surname, format: { with: /\A[а-яА-Я].*\z/,
+  #                            message: "Элементы имени должны содержать только русские символы" }
 
   scope :users_with_orders, -> (by_order = 'ASC') {  select(:id,
                                                             :name,

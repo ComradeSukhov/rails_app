@@ -9,7 +9,6 @@ class GrapeApi
 
       params do
         optional :balans, type: Integer, desc: 'Баланс пользователя'
-
       end
       # GET /api/users
       get do
@@ -33,6 +32,18 @@ class GrapeApi
         end
 
       end
+
+      # POST /api/users
+      params do
+        requires :name, type: String, desc: 'Имя'
+        requires :surname, type: String, desc: 'Фамилия'
+        requires :balans, type: Integer, desc: 'Балланс'
+      end
+      post do
+        user = User.create!(params)
+        present user, with: GrapeApi::Entities::User, detail: true
+      end
+
     end
   end
 end
