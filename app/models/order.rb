@@ -3,7 +3,6 @@ class Order < ApplicationRecord
   # validates :name, length: { maximum: 10 }
 
   before_create :set_cost
-  before_update :set_cost
 
   scope :high_cost, -> { where(cost: 1_000..) }
   scope :vip_failed, -> { failed.high_cost }
