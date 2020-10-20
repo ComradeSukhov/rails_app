@@ -1,12 +1,25 @@
 class GrapeApi
   module Entities
     class Order < Grape::Entity
-      expose :id
       expose :name
-      expose :status
-      expose :cost
       expose :created_at
-      expose :user_id
+      expose :networks_count
+      expose :tags
+      expose :status, if: lambda { |object, options| options[:status] }
+
+      def networks_count
+        "#{object.networks.size}"
+      end
+
+      def tags
+        tags = []
+
+        object.tags.each do |tag|
+          tags << { id: tag.id, name: tag.name }
+        end
+        tags
+      end
+
     end
   end
 end

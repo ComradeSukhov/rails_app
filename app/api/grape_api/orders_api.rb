@@ -72,9 +72,11 @@ class GrapeApi
 
       get do
         if params[:status]
-          Order.where(status: params[:status])
+          orders = Order.where(status: params[:status])
+          present orders, with: GrapeApi::Entities::Order, status: params[:status]
         else
-          Order.all
+          orders = Order.includes(:networks, :tags)
+          present orders, with: GrapeApi::Entities::Order
         end
       end
 
