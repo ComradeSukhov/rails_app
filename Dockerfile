@@ -1,4 +1,4 @@
-FROM ruby:2.6
+FROM ruby:2.6 as development
 
 # установка библиотек для работы приложения (сейчас отсутствуют)
 RUN apt-get update -qq && apt-get install -y locales
@@ -24,3 +24,12 @@ EXPOSE 3000
 
 # устанавливаем команду по умолчанию
 CMD ["rails", "server", "-b", "0.0.0.0"]
+
+FROM development as production
+ENV RAILS_ENV=production
+ENV RAILS_SERVE_STATIC_FILES=true
+ENV RAILS_LOG_TO_STDOUT=true
+ENV SECRET_KEY_BASE=67186287few61287
+COPY . .
+RUN rails assets:precompile
+CMD puma -t 3:5 -w 2 -b tcp://0.0.0.0:3000

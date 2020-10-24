@@ -1,0 +1,64 @@
+---
+version: "3.7"
+services:
+  app: &app
+    image: app_prod
+    command: puma -t 3:5 -w 2 -b tcp://0.0.0.0:3000
+    ports:
+      - 3000:3000
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    logging: &default_logging
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    restart: always
+    
+  replica:
+    <<: *app
+    ports:
+      - 3001:3000
+    
+  sidekiq:
+    image: app_prod
+    command: sidekiq
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    logging:
+      <<: *default_logging
+    restart: always
+
+  db:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    logging:
+      <<: *default_logging
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 15672:15672
+    volumes:
+      - rabbit:/var/lib/rabbitmq
+    logging:
+      <<: *default_logging
+    restart: always
+
+  redis:
+    image: redis:5-alpine
+    volumes:
+      - redis:/data
+    logging:
+      <<: *default_logging
+    restart: always
+
+volumes:
+  postgres:
+  redis:
+  rabbit:
