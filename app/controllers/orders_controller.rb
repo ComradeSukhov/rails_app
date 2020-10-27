@@ -37,7 +37,7 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       if @order.save
-        format.html { redirect_to @order, notice: 'Order was successfully created.' }
+        format.html { redirect_to @order, notice: "Order was successfully created." }
         format.json { render :show, status: :created, location: @order }
       else
         format.html { render :new }
@@ -83,6 +83,15 @@ class OrdersController < ApplicationController
     render :show
   end
   
+  def check
+    if session[:login]
+      check = CheckService.new(vm_params)
+      confg = check.get_confg
+      render plain: "#{check.params.inspect}, #{check.checking_params}"
+    else
+      redirect_to :login, notice: 'Войдите в систему что бы проверить заказ'
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -92,6 +101,11 @@ class OrdersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def order_params
-      params.require(:order).permit(:name, :status, :cost)
-    end    
+      params[:order][:status] = params[:order][:status].to_i
+      params.require(:order).permit(:name, :status, :cost, :user_id)
+    end
+    
+    def vm_params
+      params.permit(:cpu, :ram, :hdd_type, :hdd_capacity, :os)
+    end
 end
