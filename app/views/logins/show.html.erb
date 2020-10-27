@@ -2,7 +2,7 @@
 <p id="notice"><%= notice %></p>
 <% if session[:login] %>
   <p><strong>Имя:</strong><%= session[:login] %></p>
-  <p><strong>Баланс:</strong><%= session[:balance] %></p>
+  <p><strong>Баланс:</strong><%= session[:credits] %></p>
   <p>
     <%= form_with(url: login_path, method: :delete) do %>
       <%= submit_tag("Выйти") %>
