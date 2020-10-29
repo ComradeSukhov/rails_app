@@ -85,9 +85,34 @@ class OrdersController < ApplicationController
   
   def check
     if session[:login]
-      check = CheckService.new(vm_params)
-      confg = check.get_confg
-      render plain: "#{check.params.inspect}, #{check.checking_params}"
+
+      unless session[:credits]
+        render json: { result: false, error: 'Mister, you dont have a wallet. How were you going to pay?' }, status: :unauthorized
+        return
+      end
+
+      begin
+        check = CheckService.new(vm_params)
+        if check.params_available?
+          cost = check.cost_request['cost']
+          balance = session[:credits]
+          if balance >= cost
+          render json: {
+            result: true,
+            total: cost,
+            balance: session[:credits],
+            balance_after_transaction: balance - cost
+          }, status: :ok
+          else
+            render json: { result: false, error: 'Not enough gold' }, status: :not_acceptable
+          end
+        else
+          render json: { result: false, error: 'Parameters is not available' }, status: :not_acceptable
+        end
+      rescue(SocketError)
+        render json: { result: false, error: 'Access error to the external system' }, status: 503
+      end
+      
     else
       redirect_to :login, notice: 'Войдите в систему что бы проверить заказ'
     end
