@@ -11,7 +11,12 @@ services:
             - "3000:3000"
         depends_on:
             - db
-
+            - cost_server
+    cost_server:
+        build: 
+          context: ../05_homework_ruby-server_v2.0
+        ports:
+        - "3001:3001"
     db:
         image: postgres:11.5
         environment:
