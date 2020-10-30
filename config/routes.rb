@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
 
   namespace :admin do
@@ -19,6 +21,7 @@ Rails.application.routes.draw do
     end
   end
   
+  mount Sidekiq::Web => '/sidekiq'
   mount GrapeApi => '/api'
   mount GrapeSwaggerRails::Engine => '/swagger'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

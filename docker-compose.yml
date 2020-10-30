@@ -12,6 +12,10 @@ services:
         depends_on:
             - db
             - cost_server
+            - redis
+        environment:
+            REDIS_URL: redis://redis:6379/0
+            
     cost_server:
         build: 
           context: ../05_homework_ruby-server_v2.0
@@ -24,6 +28,33 @@ services:
             POSTGRES_PASSWORD: password
         volumes:
             - postgres:/var/lib/postgresql/data
-
+    sidekiq:
+        build: .
+        command: sidekiq
+        volumes:
+            - .:/usr/src
+        depends_on:
+            - db
+            - rabbitmq
+            - redis
+        environment:
+            REDIS_URL: redis://redis:6379/0
+        tmpfs:
+            - /usr/src/tmp/pids
+        
+    rabbitmq:
+        image: rabbitmq:3-management-alpine
+        ports:
+            - "15672:15672"
+        volumes:
+            - rabbit:/var/lib/rabbitmq
+    
+    redis:
+        image: redis:5-alpine
+        volumes:
+            - redis:/data
+            
 volumes:
     postgres:
+    redis:
+    rabbit:
