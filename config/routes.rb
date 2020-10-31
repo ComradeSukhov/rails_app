@@ -2,12 +2,14 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
 
+  resources :reports
+  resources :users
+  resource :login, only: [:show, :create, :destroy]
+
   namespace :admin do
     root 'welcome#index'
   end
-
-  resource :login, only: [:show, :create, :destroy]
-  resources :users 
+  
   resources :orders do
   
     member do

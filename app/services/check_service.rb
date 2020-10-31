@@ -38,7 +38,7 @@ class CheckService
   end
 
   def cost_request
-    client    = HTTPClient.new
+    client         = HTTPClient.new
     response_query = "cpu=#{@params[:cpu]}&ram=#{@params[:ram]}" +
                      "&hdd_type=#{@params[:hdd_type]}&hdd_capacity=#{@params[:hdd_capacity]}"
 
